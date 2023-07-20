@@ -29,11 +29,19 @@ def show_start():
     return (True if response == 'yes' else False)
 
 def show_popup():
-    global score 
+    global score, highScore
     points = "Your Score: {}".format(score)
-    text = "Did I EAT myself!!! :(\n***GAME OVER***\n\n" + points
+    with open("highScore.txt","r") as f:
+        highScore = f.read()
+    if(score>int(highScore)):
+        highScore = str(score)
+        with open("highScore.txt", "w") as f:
+            f.write(highScore)
+    highPoints = "High Score: {}".format(highScore)
+    text = "Did I EAT myself!!! :(\n***GAME OVER***\n\n" + points +"\n" + highPoints
     messagebox.showinfo("OOPS!!", text)
-    exit()
+    response = messagebox.askquestion("Restart", "Do you want to continue..?")
+    reset() if response == "yes" else exit()
 
 def draw_score():
     pen.goto(-w / 2 + 10, h / 2 - 20)
